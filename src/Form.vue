@@ -25,6 +25,7 @@
       </b-form-group>
 
       <b-button type="button" variant="primary" @click="doCopy">Copy</b-button>
+      <b-button type="button" variant="warning" @click="clearCopy">Clear</b-button>
     </b-form>
   </div>
 </template>
@@ -34,10 +35,7 @@ export default {
     name: 'Form',
     data(){
         return {
-            form: {
-                data1: '',
-                data2: '',
-            },
+            form: {},
         }
     },
     methods: {
@@ -56,19 +54,48 @@ export default {
             }
         }
         this.$copyText(clip).then(function (e) {
-            Swal.fire(
-              'Success!',
-              'Successfully copied.',
-              'success'
-            )
+          Swal.fire(
+            'Success!',
+            'Successfully copied.',
+            'success'
+          )
         }, function (e) {
-            Swal.fire(
-              'Error!',
-              'Error on copy, please try again.',
-              'error'
-            )
+          Swal.fire(
+            'Error!',
+            'Error on copy, please try again.',
+            'error'
+          )
         })
+      },
+      clearCopy(){
+        Swal.fire({
+          text: 'Are you sure you want to clear form?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Clear',
+          width: '25rem',
+        })
+        .then((result) => {
+            if(result.value){
+              this.initializeForm();
+
+              Swal.fire(
+                'Cleared!',
+                'Successfully cleared the form.',
+                'success'
+              )
+            }
+        });
+      },
+      initializeForm(){
+        this.form = {
+          data1: '',
+          data2: '',
+        }
       }
+    },
+    created(){
+      this.initializeForm();
     }
 }
 </script>
